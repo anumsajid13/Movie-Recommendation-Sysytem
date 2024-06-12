@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Personalized Recommendation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function () {
+                document.querySelector('.container').classList.add('blur');
+                document.querySelector('.loading').style.display = 'block';
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/">Home</a>
+        <a href="/personalized">Personalized Recommendation</a>
+    </div>
+    <div class="container">
+        <h1 >Personalized Recommendation Based on Your Previous Rating</h1>
+        <form action="/personalized_recommend" method="post">
+            <label for="user_id"></label>
+            <select id="user_id" name="user_id" required>
+                <option value="" disabled selected>Select your user ID</option>
+                {% for i in range(1, 751) %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" style="margin-top: 20px;">Get Recommendations</button>
+        </form>
+        {% if recommendations %}
+            <div class="recommendations">
+                {% for recommendation in recommendations %}
+                    <div class="movie">
+                        {% if recommendation.poster_url %}
+                            <img src="{{ recommendation.poster_url }}" alt="{{ recommendation.title }}">
+                        {% endif %}
+                        <p>{{ recommendation.title }} - {{ recommendation.genres }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="loading" 
+     style="display: none;">Loading...</div>
+</body>
+</html>
