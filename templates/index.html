@@ -1,1 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Recommender System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function () {
+                document.querySelector('.container').classList.add('blur');
+                document.querySelector('.loading').style.display = 'block';
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/">Home</a>
+        <a href="/personalized">Personalized Recommendation</a>
+    </div>
+    <div class="container">
+        <h1>Movie Recommender System</h1>
+        <form action="/recommend" method="post">
+            <label for="movie"></label>
+            <select id="movie" name="movie" required style="width: 400px;">
+                <option value="" disabled selected>Select a movie</option>
+                {% for movie in movie_list %}
+                    <option value="{{ movie }}" {% if movie == selected_movie %}selected{% endif %}>{{ movie }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Recommend</button>
+        </form>
+        {% if recommendations %}
+            <div class="recommendations">
+                {% for recommendation in recommendations %}
+                    <div class="movie">
+                        <img src="{{ recommendation.poster_url }}" alt="{{ recommendation.title }}">
+                        <p>{{ recommendation.title }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="loading"
+    style="display: none;"
+    >Loading...</div>
+</body>
+</html>
 
